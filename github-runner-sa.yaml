@@ -1,0 +1,17 @@
+# github-runner-sa.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: github
+  labels:
+    name: github
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  annotations:
+    azure.workload.identity/client-id: <insert workloadClientId> # echo $workloadClientId
+  labels:
+    azure.workload.identity/use: "true"
+  name: workload-sa
+  namespace: github

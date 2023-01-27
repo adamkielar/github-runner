@@ -1,0 +1,14 @@
+# github-storageclass.yaml
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: github-azurefile
+provisioner: file.csi.azure.com
+mountOptions:
+  - uid=105
+  - gid=106
+allowVolumeExpansion: true
+volumeBindingMode: Immediate
+reclaimPolicy: Delete
+parameters:
+  skuName: Standard_LRS

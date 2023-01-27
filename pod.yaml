@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: github-demo-pod
+  namespace: github
+  labels:
+    azure.workload.identity/use: "true"
+spec:
+  serviceAccountName: workload-sa
+  containers:
+    - image: IMAGE:TAG
+      name: github-demo-container
+  nodeSelector:
+    kubernetes.io/os: linux

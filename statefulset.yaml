@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: github-runner
+  namespace: github
+  labels:
+    app: github-runner
+spec:
+  ports:
+  - port: 8080
+    name: github-runner-port
+  clusterIP: None
+  selector:
+    app: github-runner
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: github-runner
+  namespace: github
+spec:
+  replicas: 1
+  minReadySeconds: 10
+  serviceName: github-runner
+  selector:
+    matchLabels:
+      app: github-runner
+      azure.workload.identity/use: "true"
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Retain
+    whenScaled: Delete
+  template:
+    metadata:
+      labels:
+        app: github-runner
+        azure.workload.identity/use: "true"
+    spec:
+      terminationGracePeriodSeconds: 10
+      serviceAccountName: workload-sa
+      containers:
+      - image: githubacr14149.azurecr.io/github-runner:v1.0.0 # Add your ACR respository
+        name: github-runner
+        imagePullPolicy: Always
+        command:
+        - sleep
+        args:
+        - 99d
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "1Gi"
+          limits:
+            cpu: "2000m"
+            memory: "2Gi"
+        volumeMounts:
+          - mountPath: "/home/github"
+            name: runner-data
+      volumes:
+        - name: runner-data
+          persistentVolumeClaim:
+            claimName: github-pvc

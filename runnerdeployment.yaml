@@ -1,0 +1,21 @@
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: github-runnerdeploy
+  namespace: github
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: github-runner-v2
+  template:
+    metadata:
+      labels:
+        app: github-runner-v2
+        azure.workload.identity/use: "true"
+    spec:
+      repository: adamkielar/github-runner
+      labels:
+        - github-runner
+      ephemeral: true
+      serviceAccountName: workload-sa
