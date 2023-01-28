@@ -19,7 +19,7 @@ jobs:
 
       - name: Build image with AZ ACR
         run: |
-          az acr build -f /actions-runner/_work/github-runner/github-runner/Dockerfile -t githubacr14149.azurecr.io/github-demo:${{ github.sha }} -r githubacr14149 .
+          az acr build -f /actions-runner/_work/github-runner/github-runner/Dockerfile -t githubacr12713.azurecr.io/github-demo:${{ github.sha }} -r githubacr12713 .
       
       - name: Get AKS credentials
         run: |
@@ -28,4 +28,4 @@ jobs:
 
       - name: Deploy application
         run: |
-          sed 's|IMAGE|githubacr14149.azurecr.io/github-demo|g; s/TAG/${{ github.sha }}/g' /actions-runner/_work/github-runner/github-runner/pod.yaml | kubectl apply -f -
+          sed 's|IMAGE|githubacr12713.azurecr.io/github-demo|g; s/TAG/${{ github.sha }}/g' /actions-runner/_work/github-runner/github-runner/pod.yaml | kubectl apply -f -
